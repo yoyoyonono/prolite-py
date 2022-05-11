@@ -5,6 +5,8 @@ from sign import Sign
 import PIL.Image
 import os
 
+from split_kata import split_kata
+
 com_port = 'COM6'
 sign_id = '01'
 baud_rate = 9600
@@ -34,6 +36,7 @@ for x in os.listdir('./font/'):
 
 def display_jp(sign: Sign, text: str):
     """Displays a string of Japanese characters"""
+    text = split_kata(text)
     text = text.rjust(len(text) + (3 - len(text)%3), '　')
     for x in range(0, len(text), 3):
         char1 = CHARS[text[x]]
@@ -41,11 +44,12 @@ def display_jp(sign: Sign, text: str):
         char3 = CHARS[text[x + 2]]
         print(chr(65 + x//3))
         sign.create_graphic(chr(65 + x//3), char_to_string(assemble_chars(char1, char2, char3)))
-    sign.send_text('A', ''.join(f'<B{chr(65 + x)}>' for x in range(len(text)//3)).ljust(10))
+    sign.send_text('A', '<FY>' + ''.join(f'<B{chr(65 + x)}>' for x in range(len(text)//3)) + ' ' * 10)
 
 port = serial.Serial(com_port, baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
 sign = Sign(port, '01', 9600)
-display_jp(sign, 'ククク')
+#display_jp(sign, ('アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォッャュョ゛゜。・、「」'))
+display_jp(sign, 'ツイッターノ　フォロワー')
 #while x := input():
 #    sign.wake_up()
 #    sign.send_text('A', x)
