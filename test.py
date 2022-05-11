@@ -1,9 +1,9 @@
-from sre_constants import RANGE_UNI_IGNORE
 from typing import List
 import serial
 from sign import Sign
 import PIL.Image
 import os
+import time
 
 from split_kata import split_kata
 
@@ -44,12 +44,13 @@ def display_jp(sign: Sign, text: str):
         char3 = CHARS[text[x + 2]]
         print(chr(65 + x//3))
         sign.create_graphic(chr(65 + x//3), char_to_string(assemble_chars(char1, char2, char3)))
-    sign.send_text('A', '<FY>' + ''.join(f'<B{chr(65 + x)}>' for x in range(len(text)//3)) + ' ' * 10)
+    time.sleep(0.2)
+    sign.send_text('A', '<FX>' + ''.join(f'<B{chr(65 + x)}>' for x in range(len(text)//3)) + ' ' * 10)
 
 port = serial.Serial(com_port, baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
 sign = Sign(port, '01', 9600)
-#display_jp(sign, ('アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォッャュョ゛゜。・、「」'))
-display_jp(sign, 'ツイッターノ　フォロワー')
+display_jp(sign, ('アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォッャュョ゛゜。・、「」千万円馬尺'))
+#display_jp(sign, 'アキハバラ馬尺')
 #while x := input():
 #    sign.wake_up()
 #    sign.send_text('A', x)

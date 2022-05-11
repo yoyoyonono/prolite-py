@@ -9,7 +9,7 @@ class Sign:
     
     def __send_command(self, command):
         self.serial_port.write(f'{command}\r\n'.encode('utf-8'))
-        time.sleep(0.5)
+#        time.sleep(0.1)
 
     def create_graphic(self, page:str, graphic:str):
         self.__send_command(f'<ID{self.sign_id}><G{page}>{graphic}')
