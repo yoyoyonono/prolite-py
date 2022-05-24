@@ -7,7 +7,7 @@ import time
 
 from split_kata import split_kata
 
-com_port = 'COM6'
+com_port = 'COM1'
 sign_id = '01'
 baud_rate = 9600
 
@@ -37,7 +37,7 @@ for x in os.listdir('./font/'):
 def display_jp(sign: Sign, text: str):
     """Displays a string of Japanese characters"""
     text = split_kata(text)
-    text = text.rjust(len(text) + (3 - len(text)%3), '　')
+    text = text.ljust(len(text) + (3 - len(text)%3), '　')
     for x in range(0, len(text), 3):
         char1 = CHARS[text[x]]
         char2 = CHARS[text[x + 1]]
@@ -49,8 +49,9 @@ def display_jp(sign: Sign, text: str):
 
 port = serial.Serial(com_port, baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
 sign = Sign(port, '01', 9600)
+sign.clear_graphics()
 display_jp(sign, ('アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォッャュョ゛゜。・、「」千万円馬尺'))
-#display_jp(sign, 'アキハバラ馬尺')
+#display_jp(sign, 'ホロライブ')
 #while x := input():
 #    sign.wake_up()
 #    sign.send_text('A', x)
