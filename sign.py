@@ -9,13 +9,16 @@ class Sign:
     
     def __send_command(self, command):
         self.serial_port.write(f'{command}\r\n'.encode('utf-8'))
-        time.sleep(0.03)
+        time.sleep(0.1)
+
+    def send_command(self, command):
+        self.__send_command(f'<ID{self.sign_id}>{command}')
 
     def create_graphic(self, page:str, graphic:str):
         self.__send_command(f'<ID{self.sign_id}><G{page}>{graphic}')
 
     def clear_graphics(self):
-        self.__send_command(f'<ID{self.sign_id}><DP*>')
+        self.__send_command(f'<ID{self.sign_id}><DG*>')
 
     def clear_page(self, page:str):
         self.__send_command(f'<ID{self.sign_id}><DP{page}>')
